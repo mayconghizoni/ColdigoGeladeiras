@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" type="text/css" href="../../css/site.css">
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+        <script src =  "../../js/site.js"></script>
+        <meta name="description" content="Site do Coldigo Geladeiras">
+        <meta name="keywords" content="Geladeiras, frost-free, refrigeração">
+        <meta name="author" content="Maycon Ghizoni">
+        <meta name="viewport" content="width=devide-width, initial-scale=1.0">
+        <title>Coldigo geladeiras</title>
+    </head>
+    <body>
+        <header>
+        </header>
+        <nav>
+        </nav>
+        <section>
+            <h2>Fale conosco!</h2>
+            <p>Ficou com alguma dúvida? Preencha esse formulário e entramos em contato!</p>
+            <form name="frmfaleconosco" method="POST" action="#" onsubmit="return validaFaleConosco()"> 
+
+                <fieldset class="faleconosco">
+                    <legend>Dados pessoais</legend>
+                    <label for="nome"> Nome: </label>
+                    <input type="text" name="txtnome" id="nome" placeholder="Ana Clara">
+                    <label for="fone"> Telefone:</label> 
+                    <input type="text" name="txtfone" id="fone" placeholder="(48)99309-2034">
+                    <label for="email"> E-mail:</label>
+                    <input type="email" name="txtemail" id="email">
+                </fieldset>
+
+                <fieldset class="faleconosco">
+                    <legend>Motivo do contato</legend>
+                    <label for="motivo">Motivo: </label>  
+                    <select name="selmotivo" id="motivo" onchange="verificaMotivo(this.value)"> 
+                        <option value="">Escolha</option>
+                        <option value="RE">Reclamação</option>
+                        <option value="SU">Sugestão</option> 
+                        <option value="PR">Informações sobre o produto</option>
+                    </select>
+                    <div id="opcaoProduto"></div>
+                    <label for="comentario">Comentário:</label>
+                    <textarea name="txtcomentario" id="comentario"></textarea>
+                    <button type="reset" onclick="verificaMotivo(null)">Limpar</button><button type="submit">Enviar</button>
+                </fieldset>
+
+            </form>
+        </section>
+        <footer></footer>
+    </body>
+</html>
