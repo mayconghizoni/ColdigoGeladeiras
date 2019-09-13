@@ -7,7 +7,9 @@ $(document).ready(function() {
     
     COLDIGO.carregaPagina = function(pagename){
         $("section").empty();
-        $("section").load(pagename+"/", function(response, status, info){
+        $("section").load(pagename+"/", 
+        
+        function(response, status, info){
             if (status == "error"){
                 var msg = "Houve um erro ao encontrar a página: "+info.status+" - " + info.statusText;
                 $("section").html(msg);
