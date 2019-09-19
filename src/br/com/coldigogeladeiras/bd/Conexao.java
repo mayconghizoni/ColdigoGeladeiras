@@ -10,7 +10,7 @@ public class Conexao {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
 			conexao = java.sql.DriverManager.getConnection("jdbc:mysql://localhost/bdcoldigo?" + 
-			"user=root&password=root&useTimezone=true&serverTimezone=UTC");
+			"user=root&password=as&useTimezone=true&serverTimezone=UTC");
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

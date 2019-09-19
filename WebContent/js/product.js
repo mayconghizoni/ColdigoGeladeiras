@@ -1,22 +1,25 @@
-COLDIGO.produto = new Object();
+COLDIGO.produto = new Object()
 
 $(document).ready(function(){
 
     //Carrega as marcas registradas no BD no select do formulário de inserir
-    COLDIGO.produto.carregaMarcas = function(){
+    COLDIGO.produto.carregarMarcas = function(){
 
+        alert("tentando buscar marcas")
+        
         $.ajax({
             type: "GET",
             url: "/ProjetoTrilhaWeb/rest/marca/buscar",
-            success: function() {
-
+            success: function(marcas) {
+                alert("Sucesso")
             },
-            error: function () {
-
+            error: function(info) {
+                alert("Errorrrrrrrrrrrrrrrrrrrrrrrrrrr")
             } 
-        });
-
+        })
 
     }
+    
+    COLDIGO.produto.carregarMarcas()
 
-});
+})
