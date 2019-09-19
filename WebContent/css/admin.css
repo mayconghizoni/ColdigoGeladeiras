@@ -90,7 +90,13 @@ footer{
     padding: 10px;
 }
 
-/* SLYTE CRUDS */
+/***** MODAIS *****/
+
+#modalAviso{
+    display: none;
+}
+
+/* StYlE CRUDS */
 
 section h2, section h3{
     text-align: center;
