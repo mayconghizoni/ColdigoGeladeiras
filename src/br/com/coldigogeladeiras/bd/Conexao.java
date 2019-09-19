@@ -8,7 +8,7 @@ public class Conexao {
 	
 	public Connection abrirConexao() {
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+			Class.forName("com.mysql.cj.jdbc.Driver");
 			conexao = java.sql.DriverManager.getConnection("jdbc:mysql://localhost/bdcoldigo?" + 
 			"user=root&password=as&useTimezone=true&serverTimezone=UTC");
 		}catch(Exception e) {
