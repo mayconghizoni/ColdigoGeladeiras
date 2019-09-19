@@ -21,4 +21,8 @@ public class Marca implements Serializable{
 		this.nome = nome;
 	}
 	
+	public void setId(int id) { //Adicionado por Maycon Ghizoni (QUESTINAR NA VALIDAÇÃO)
+		this.id = id;
+	}
+	
 }
