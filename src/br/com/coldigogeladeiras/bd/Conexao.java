@@ -8,12 +8,14 @@ public class Conexao {
 	
 	public Connection abrirConexao() {
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");//Seleciona driver JDBC
 			conexao = java.sql.DriverManager.getConnection("jdbc:mysql://localhost/bdcoldigo?" + 
-			"user=root&password=as&useTimezone=true&serverTimezone=UTC");
+			"user=root&password=as&useTimezone=true&serverTimezone=UTC"); //Passas os parametros da conexão atual
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+		
+		//retorna o objeto com a conexao do banco para quem solicitou 
 		return conexao;
 	}
 	

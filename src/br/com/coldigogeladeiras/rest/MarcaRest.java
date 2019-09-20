@@ -23,12 +23,12 @@ public class MarcaRest extends UtilRest{
 		try {
 			List<Marca> listaMarcas = new ArrayList<Marca>();
 			
-			Conexao conec = new Conexao();
+			Conexao conec = new Conexao();//Instancia o objeto conec com os parâmetros da conexão com o bd
 			Connection conexao = conec.abrirConexao();
-			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
-			listaMarcas = jdbcMarca.buscar();
+			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);// Instancia objeto jdbcMarca para executar as instruções SQL 
+			listaMarcas = jdbcMarca.buscar(); // Armazena os dados retirados do método buscar () na listaMarcar 
 			conec.fecharConexao();
-			return this.buildResponse(listaMarcas);
+			return this.buildResponse(listaMarcas); //Retorna lista de marcas armazenadas em um JSON
 		}catch(Exception e){
 			e.printStackTrace();
 			return this.buildErrorResponse(e.getMessage());
