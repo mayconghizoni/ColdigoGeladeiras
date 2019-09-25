@@ -5,8 +5,6 @@ $(document).ready(function(){
     //Carrega as marcas registradas no BD no select do formulário de inserir
     COLDIGO.produto.carregarMarcas = function(){
 
-        alert("tentando buscar marcas")
-        
         $.ajax({
             type: "GET",
             url: COLDIGO.PATH + "marca/buscar",
@@ -72,7 +70,7 @@ $(document).ready(function(){
         produto.capacidade = document.frmAddProduto.capacidade.value;
         produto.valor = document.frmAddProduto.valor.value;
 
-        if((produto.categoria=="")||(produto.marcaId=="")||(produto.modelo=="")||(produto.capacidade=="")||(produto.valor="")){
+        if((produto.categoria=="")||(produto.marcaId=="")||(produto.modelo=="")||(produto.capacidade=="")||(produto.valor=="")){
 
             COLDIGO.exibirAviso("Preencha todos os campos!")
 
@@ -81,7 +79,7 @@ $(document).ready(function(){
             $.ajax({
                 type: "POST",
                 url: COLDIGO.PATH + "produto/inserir",
-                data:JSON.stringify(produto),
+                data: JSON.stringify(produto),
                 success: function(msg){
                     COLDIGO.exibirAviso(msg);
                     $("#addProduto").trigger("reset");
