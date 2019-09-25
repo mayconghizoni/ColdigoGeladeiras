@@ -63,6 +63,8 @@ $(document).ready(function(){
     //Cadastra no BD o produto informado
     COLDIGO.produto.cadastrar = function(){
 
+
+        //Cria e armazena as informações no objeto produto
         var produto = new Object();
         produto.categoria = document.frmAddProduto.categoria.value;
         produto.marcaId = document.frmAddProduto.marcaId.value;
@@ -70,6 +72,8 @@ $(document).ready(function(){
         produto.capacidade = document.frmAddProduto.capacidade.value;
         produto.valor = document.frmAddProduto.valor.value;
 
+
+        //verifica se os campos não estão vazios
         if((produto.categoria=="")||(produto.marcaId=="")||(produto.modelo=="")||(produto.capacidade=="")||(produto.valor=="")){
 
             COLDIGO.exibirAviso("Preencha todos os campos!")
@@ -77,11 +81,11 @@ $(document).ready(function(){
         } else {
 
             $.ajax({
-                type: "POST",
+                type: "POST", //define o metodo de envio como post
                 url: COLDIGO.PATH + "produto/inserir",
-                data: JSON.stringify(produto),
+                data: JSON.stringify(produto), //envia o objeto produto em formato JSON
                 success: function(msg){
-                    COLDIGO.exibirAviso(msg);
+                    COLDIGO.exibirAviso(msg); //exibe a mensagem devolvida pelo servidor
                     $("#addProduto").trigger("reset");
                 },
                 error: function(info){
