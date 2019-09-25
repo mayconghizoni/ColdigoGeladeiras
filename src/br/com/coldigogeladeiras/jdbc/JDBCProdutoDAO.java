@@ -16,6 +16,8 @@ public class JDBCProdutoDAO implements ProdutoDAO{
 	
 	public boolean inserir(Produto produto) {
 		
+		
+		//armazena o comando SQL dentro de uma String comando
 		String comando = "INSERT INTO produtos "
 				+ "(id, categoria, modelo, capacidade, valor, marcas_id) "
 				+ "VALUES (?,?,?,?,?,?)";
