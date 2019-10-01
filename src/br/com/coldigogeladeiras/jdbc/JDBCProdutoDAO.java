@@ -2,7 +2,14 @@ package br.com.coldigogeladeiras.jdbc;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.google.gson.JsonObject;
+
 import br.com.coldigogeladeiras.jdbcinterface.ProdutoDAO;
 import br.com.coldigogeladeiras.modelo.Produto;
 
@@ -45,6 +52,65 @@ public class JDBCProdutoDAO implements ProdutoDAO{
 			return false;
 		}
 		return true;
+	}
+
+	public List<JsonObject> buscarPorNome(String nome) {
+		
+		//Inicia criação do comando SQL de busca
+		String comando = "SELECT produtos.*, marcas.nome as marca FROM produtos "
+				+ "INNER JOIN marcas ON produtos.marcas_id = marcas.id ";
+		
+		//Se o nome não estiver vazio...
+		if(!nome.equals("")) {
+			//concatena no camando o WHERE buscando no nome do produto o texto da variável
+			comando += "WHERE modelo LIKE '%" + nome + "%' ";
+		}
+		//Finaliza o comando ordenando alfabeticamente por categoria, marca e depois modelo
+		comando+= "ORDER BY categoria ASC, marcas.nome ASC, modelo ASC";		
+		
+		List<JsonObject> listaProdutos = new ArrayList<JsonObject>();
+		JsonObject produto = null;
+		
+		try {
+			
+			Statement stmt = conexao.createStatement();
+			ResultSet rs = stmt.executeQuery(comando);
+			
+			while(rs.next()) {
+				
+				//Capta dados do bd e armazena em variáveis
+				int id = rs.getInt("id");
+				String categoria = rs.getString("categoria");
+				String modelo = rs.getString("modelo");
+				int capacidade = rs.getInt("capacidade");
+				float valor = rs.getFloat("valor");
+				String marcaNome = rs.getString("marca");
+				
+				if (categoria.equals("1")) {
+					categoria = "Geladeira";
+				}else if (categoria.equals("2")) {
+					categoria = "Freezer";
+				}
+				
+				//Adiciona valores das variaveis no obj Json
+				produto = new JsonObject();
+				produto.addProperty("id", id);
+				produto.addProperty("categoria", categoria);
+				produto.addProperty("modelo", modelo);
+				produto.addProperty("capacidade", capacidade);
+				produto.addProperty("valor", valor);
+				produto.addProperty("marcaNome", marcaNome);
+				
+				//add obj json na lista de produtos
+				listaProdutos.add(produto);
+				
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		return listaProdutos;
 	}
 	
 }

@@ -42,3 +42,8 @@ $(document).ready(function() {
 
 
 });
+
+//Exibe os valores financeiros no formato da moeda real
+COLDIGO.formatarDinheiro = function(valor){
+    return valor.toFixed(2).replace('.',',').replace(/(\d)(?=(\d{3})+\,)/g, "$1.");
+}

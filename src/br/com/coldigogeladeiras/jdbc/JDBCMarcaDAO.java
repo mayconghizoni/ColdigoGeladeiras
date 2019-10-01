@@ -48,7 +48,7 @@ public class JDBCMarcaDAO implements MarcaDAO{
 				String nome = rs.getString("nome");
 				
 				//Setando no objeto marca os valores encontrados
-				marca.setId(id); // Não desenvolvido o "setId" na classe "Marca" (QUESTINAR NA VALIDAÇÃO)
+				marca.setId(id); 
 				marca.setNome(nome);
 				
 				//Adição da instância contida no objeto Marca na lista de marcas
