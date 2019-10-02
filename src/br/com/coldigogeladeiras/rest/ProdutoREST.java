@@ -62,14 +62,14 @@ public class ProdutoREST extends UtilRest {
 			
 			List<JsonObject> listaProdutos = new ArrayList<JsonObject>();
 			
-			Conexao conec = new Conexao();
-			Connection conexao = conec.abrirConexao(); 
+			Conexao conec = new Conexao(); // Instancia obj conec 
+			Connection conexao = conec.abrirConexao(); //Abre conexao com bd
 			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao);
-			listaProdutos = jdbcProduto.buscarPorNome(nome);
-			conec.fecharConexao();
+			listaProdutos = jdbcProduto.buscarPorNome(nome); //Retorna lista de produtos passando "nome" como parametro do método
+			conec.fecharConexao(); // Fecha conexao
 		
-			String json = new Gson().toJson(listaProdutos);
-			return this.buildResponse(json);
+			String json = new Gson().toJson(listaProdutos); // Converte lista de produtos para String Json
+			return this.buildResponse(json); // Retorna Json para frontend
 			
 		}catch(Exception e){
 			e.printStackTrace();

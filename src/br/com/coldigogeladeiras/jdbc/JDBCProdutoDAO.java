@@ -68,12 +68,14 @@ public class JDBCProdutoDAO implements ProdutoDAO{
 		//Finaliza o comando ordenando alfabeticamente por categoria, marca e depois modelo
 		comando+= "ORDER BY categoria ASC, marcas.nome ASC, modelo ASC";		
 		
-		List<JsonObject> listaProdutos = new ArrayList<JsonObject>();
-		JsonObject produto = null;
+		List<JsonObject> listaProdutos = new ArrayList<JsonObject>(); // Instancia obj de lista de objeto Json
+		JsonObject produto = null; //Instancia obj do tipo Json com valor null
 		
 		try {
 			
+			//Instancia obj stmt com a conexao e cria uma Statment
 			Statement stmt = conexao.createStatement();
+			//Executa comando SQL usando obj stmt
 			ResultSet rs = stmt.executeQuery(comando);
 			
 			while(rs.next()) {
@@ -86,6 +88,7 @@ public class JDBCProdutoDAO implements ProdutoDAO{
 				float valor = rs.getFloat("valor");
 				String marcaNome = rs.getString("marca");
 				
+				//Verifica e transforma o valor de categoria em uma String
 				if (categoria.equals("1")) {
 					categoria = "Geladeira";
 				}else if (categoria.equals("2")) {
@@ -93,7 +96,7 @@ public class JDBCProdutoDAO implements ProdutoDAO{
 				}
 				
 				//Adiciona valores das variaveis no obj Json
-				produto = new JsonObject();
+				produto = new JsonObject(); // Constroi obj do tipo JsonObj 
 				produto.addProperty("id", id);
 				produto.addProperty("categoria", categoria);
 				produto.addProperty("modelo", modelo);
@@ -110,6 +113,7 @@ public class JDBCProdutoDAO implements ProdutoDAO{
 			e.printStackTrace();
 		}
 		
+		//retonra lista de produtos
 		return listaProdutos;
 	}
 	
