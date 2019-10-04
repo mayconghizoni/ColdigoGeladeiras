@@ -58,6 +58,7 @@ $(document).ready(function(){
 
     }
     
+    //Carrega marcas ao carregar a página
     COLDIGO.produto.carregarMarcas()
 
     //Cadastra no BD o produto informado
@@ -85,6 +86,7 @@ $(document).ready(function(){
                 url: COLDIGO.PATH + "produto/inserir",
                 data: JSON.stringify(produto), //envia o objeto produto em formato JSON
                 success: function(msg){
+                    COLDIGO.produto.buscar(); //Atualiza lista de produdos
                     COLDIGO.exibirAviso(msg); //exibe a mensagem devolvida pelo servidor
                     $("#addProduto").trigger("reset");
                 },
