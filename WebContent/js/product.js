@@ -128,7 +128,7 @@ $(document).ready(function(){
         "<th>Categoria</th>" +
         "<th>Marca</th>" +
         "<th>Modelo</th>" +
-        "<th>Cap.(1)</th>" +
+        "<th>Cap.(l)</th>" +
         "<th>Valor</th>" +
         "<th class='acoes'>Ações</th>" +
         "</tr>";
