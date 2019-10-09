@@ -144,7 +144,7 @@ $(document).ready(function(){
                 "<td>R$ "+COLDIGO.formatarDinheiro(listaDeProdutos[i].valor)+"</td>"+
                 "<td>" +
                     "<a><img src='../../imgs/edit.png' alt='Editar registro'></a>" +
-                    "<a><img src='../../imgs/delete.png' alt='Editar registro'></a>" +
+                    "<a onclick=\"COLDIGO.produto.excluir('"+listaDeProdutos[i].id+"')\"><img src='../../imgs/delete.png' alt='Deletar registro'></a>" +
                 "</td>" +
                 "</tr>"
             }
@@ -161,4 +161,18 @@ $(document).ready(function(){
     //EXECUTA A FUNÇÃO DE BUSCAR AO CARREGAR A PÁGINA
     COLDIGO.produto.buscar();
 
+    //Exclui o produto selecionado
+    COLDIGO.produto.excluir = function(id){
+        $.ajax({
+            type: "DELETE", //Define metodo de envio
+            url: COLDIGO.PATH + "produto/excluir/"+id, //Define url de envio e passa o valor id 
+            success: function(msg){
+                COLDIGO.exibirAviso(msg); // Exibe msg retornada do servidor em caso de sucesso
+                COLDIGO.produto.buscar(); // Atualiza lista de produtos
+            },
+            error: function(info){
+                COLDIGO.exibirAviso("Erro ao excluir produto: "+info.status+" - "+info.statusText); //Exibe mensagem de erro
+            }
+        })
+    }
 })

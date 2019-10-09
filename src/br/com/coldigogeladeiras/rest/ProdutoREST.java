@@ -4,9 +4,11 @@ import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -75,6 +77,37 @@ public class ProdutoREST extends UtilRest {
 			e.printStackTrace();
 			return this.buildErrorResponse(e.getMessage());
 		}
+	}
+	
+	@DELETE 
+	@Path("/excluir/{id}") //Define url do método
+	@Consumes("application/*") //Avisa que será consumido uma informação vinda da url
+	public Response excluir(@PathParam("id") int id) { //Para funcionar o método precisa receber da url um parametro do tipo int / id
+		
+		try { 
+			
+			Conexao conec = new Conexao(); //Cria obj conec
+			Connection conexao = conec.abrirConexao(); //Abre conexao com bd
+			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao); 
+			
+			boolean retorno = jdbcProduto.deletar(id); //Chama o método deletar passando id como parametro e retorna um booleano
+			
+			String msg = "";
+			if(retorno){ 
+				msg = "Produto excluído com sucesso!"; //Se o retorno for verdadeiro armazena msg de sucesso
+			}else {
+				msg = "Erro ao excluir produto."; //Se não, armazena msg de erro
+			}
+			
+			conec.fecharConexao(); //fecha conexao com bd
+			
+			return this.buildResponse(msg); //monta response e retorna via json para o front-end
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+			return this.buildErrorResponse(e.getMessage());
+		}
+		
 	}
 
 }

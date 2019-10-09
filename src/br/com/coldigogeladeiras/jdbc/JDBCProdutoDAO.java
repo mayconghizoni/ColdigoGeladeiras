@@ -117,4 +117,28 @@ public class JDBCProdutoDAO implements ProdutoDAO{
 		return listaProdutos;
 	}
 	
+	public boolean deletar(int id){
+		
+		//armazena comando SQL numa string para ser usada posteriormente
+		String comando = "DELETE FROM produtos WHERE id = ?"; 
+		PreparedStatement p; //Inicia obj P
+		
+		try {
+			
+			//Monta e prepara p usando obj conexao com o comando preparedStatment passsando A string comando como parametro
+			p = this.conexao.prepareStatement(comando); 
+			//Substitui id na posição correspondente que falta no SQL 
+			p.setInt(1, id);
+			//Executa comando SQL
+			p.execute();
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		//Em caso se sucesso retorna true
+		return true;
+	}
+	
 }
