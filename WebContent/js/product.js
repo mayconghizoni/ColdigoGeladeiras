@@ -3,7 +3,13 @@ COLDIGO.produto = new Object()
 $(document).ready(function(){
 
     //Carrega as marcas registradas no BD no select do formulário de inserir
-    COLDIGO.produto.carregarMarcas = function(){
+    COLDIGO.produto.carregarMarcas = function(id){
+
+        if(id!=undefined){
+            select = "#selMarcaEdicao";
+        }else{
+            select = "#selMarca";
+        }
 
         $.ajax({
             type: "GET",
@@ -13,32 +19,38 @@ $(document).ready(function(){
 
 
                     //Cria opção escolha com valor vazio como padrão caso haja algo no banco de dados
-                    $("selMarca").html("")
+                    $(select).html("")
                     var option = document.createElement("option")
                     option.setAttribute("value", "")
                     option.innerHTML = ("Escolha")
-                    $("#selMarca").append(option)
+                    $(select).append(option)
 
                     //A cada valor encontrado no banco, cria mais uma option dentro do select
                     for (var i = 0; i < marcas.length; i++){
 
                         var option = document.createElement("option")
                         option.setAttribute("value", marcas[i].id)
+
+                        if((id!=undefined)&&(id==marcas[i].id)){
+                            option.setAttribute("selected", "selected");
+                        }
+                        
+
                         option.innerHTML = (marcas[i].nome)
-                        $("#selMarca").append(option)
+                        $(select).append(option)
 
                     }
 
 
                 }else{
-                    $("selMarca").html("")
+                    $(select).html("")
 
                     //Caso o não tenha nenhum valor cadastrado no banco ele cria uma uma option com aviso!
                     var option = document.createElement("option")
                     option.setAttribute("value", "")
                     option.innerHTML = ("Cadastre uma marca primeiro!")
-                    $("#selMarca").append(option)
-                    $("#selMarca").addClass("aviso")
+                    $(select).append(option)
+                    $(select).addClass("aviso")
 
                 }
             },
@@ -46,12 +58,12 @@ $(document).ready(function(){
 
                 COLDIGO.exibirAviso("Erro ao buscar marcas: "+info.status+" - " + info.statusText)
 
-                $("#selMarca").html("")
+                $(select).html("")
                 var option = document.createElement("option")
                 option.setAttribute("value", "")
                 option.innerHTML = ("Erro ao carregar marcas!")
-                $("#selMarca").append(option)
-                $("#selMarca").addClass("aviso")
+                $(select).append(option)
+                $(select).addClass("aviso")
 
             } 
         })
@@ -143,7 +155,7 @@ $(document).ready(function(){
                 "<td>"+listaDeProdutos[i].capacidade+"</td>"+
                 "<td>R$ "+COLDIGO.formatarDinheiro(listaDeProdutos[i].valor)+"</td>"+
                 "<td>" +
-                    "<a><img src='../../imgs/edit.png' alt='Editar registro'></a>" +
+                    "<a onclick=\"COLDIGO.produto.exibirEdicao('"+listaDeProdutos[i].id+"')\"><img src='../../imgs/edit.png' alt='Editar registro'></a>" +
                     "<a onclick=\"COLDIGO.produto.excluir('"+listaDeProdutos[i].id+"')\"><img src='../../imgs/delete.png' alt='Deletar registro'></a>" +
                 "</td>" +
                 "</tr>"
@@ -165,7 +177,7 @@ $(document).ready(function(){
     COLDIGO.produto.excluir = function(id){
         $.ajax({
             type: "DELETE", //Define metodo de envio
-            url: COLDIGO.PATH + "produto/excluir/"+id, //Define url de envio e passa o valor id 
+            url: COLDIGO.PATH + "produto/excluir/"+id, //Define urexcluirexcluirl de envio e passa o valor id 
             success: function(msg){
                 COLDIGO.exibirAviso(msg); // Exibe msg retornada do servidor em caso de sucesso
                 COLDIGO.produto.buscar(); // Atualiza lista de produtos
@@ -175,4 +187,57 @@ $(document).ready(function(){
             }
         })
     }
+
+    COLDIGO.produto.exibirEdicao = function(id){
+        $.ajax({
+            type: "GET",
+            url: COLDIGO.PATH + "produto/buscarPorId",
+            data: "id="+id,
+            success: function(produto){
+
+                document.frmEditaProduto.idProduto.value = produto.id;
+                document.frmEditaProduto.modelo.value = produto.modelo;
+                document.frmEditaProduto.capacidade.value = produto.capacidade;
+                document.frmEditaProduto.valor.value = produto.valor;
+
+                var selCategoria = document.getElementById('selCategoriaEdicao');
+                for(var i=0; i < selCategoria.length; i++){
+                    if(selCategoria.options[i].value == produto.categoria){
+                        selCategoria.options[i].setAttribute("selected", "selected");
+                    }else{
+                        selCategoria.options[i].removeAttribute("selected");
+                    }
+                }
+
+                COLDIGO.produto.carregarMarcas(produto.marcaId);
+
+                var modalEditaProduto = {
+                    title: "Editar Produto",
+                    height: 400,
+                    width: 550,
+                    modal: true,
+                    buttons:{
+                        "Salvar": function(){
+                            
+                        },
+                        "Cancelar": function(){
+                            $(this).dialog("close");
+                        }
+                    },
+                    close: function(){
+                        //caso o usuário simplesmente feche a caixa de edição não acontece nada.
+                    }
+                }
+
+                $("#modalEditaProduto").dialog(modalEditaProduto);
+
+            },
+
+            error: function(info){
+                COLDIGO.exibirAviso("Erro ao buscar produto para edição: "+info.status+" - "+ info.statusText);
+            }
+        })
+    }
+
+
 })

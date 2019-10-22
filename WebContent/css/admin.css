@@ -92,7 +92,7 @@ footer{
 
 /***** MODAIS *****/
 
-#modalAviso{
+#modalAviso, .modalEditar{
     display: none;
 }
 
@@ -180,3 +180,4 @@ section h2, section h3{
     height: 20px;
     cursor: pointer;
 }
+
