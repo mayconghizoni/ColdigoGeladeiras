@@ -110,23 +110,23 @@ public class ProdutoREST extends UtilRest {
 		
 	}
 	
-	@GET
-	@Path("/buscarPorId")
-	@Consumes("application/*")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response buscarPorId(@QueryParam("id") int id) {
+	@GET 														//Define método de recebimento da informação
+	@Path("/buscarPorId") 										//Define caminho do método
+	@Consumes("application/*") 									//Anotação que define que esse método recebe uma informação do front
+	@Produces(MediaType.APPLICATION_JSON) 						//Anotação que esse método gera um arquivo do tipo Json
+	public Response buscarPorId(@QueryParam("id") int id) {		//Recebe id do front end do tipo inteiro
 			
 		try {
-			Produto produto = new Produto();
-			Conexao conec = new Conexao();
-			Connection conexao = conec.abrirConexao();
-			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao);
+			Produto produto = new Produto();	//Cria um novo objeto produto do tipo produto
+			Conexao conec = new Conexao();		//Cria objeto conec do tipo conexao
+			Connection conexao = conec.abrirConexao();		//abre uma nova conexao com banco de dados a partir do método abrirConexao
+			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao); 	//instancia um objeto jdbcProduto passando como parametro pro seu Construtor o objeto conexao
 			
-			produto = jdbcProduto.buscarPorId(id);
+			produto = jdbcProduto.buscarPorId(id); 		//A partir do método buscarPorId retorna um objeto do tipo produto e armazena no objeto produto. É passado como parâmetor o id.
 			
-			conec.fecharConexao();
+			conec.fecharConexao(); 		//Fecha conexao com banco de dados
 			
-			return this.buildResponse(produto);
+			return this.buildResponse(produto); //Com o método buildResponse monta a response no tipo JSon e retorna para o front. Passando como parametro o objeto produto.
 			
 		}catch(Exception e) {
 			e.printStackTrace();

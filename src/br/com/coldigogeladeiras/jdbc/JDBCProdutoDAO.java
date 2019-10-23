@@ -144,23 +144,24 @@ public class JDBCProdutoDAO implements ProdutoDAO{
 	@Override
 	public Produto buscarPorId(int id) {
 		
-		String comando = "SELECT * from produtos WHERE produtos.id = ?";
-		Produto produto = new Produto();
+		String comando = "SELECT * from produtos WHERE produtos.id = ?";	//Define comando SQL numa String
+		Produto produto = new Produto(); 	//Cria um novo objeto do tipo produto
 		
 		try {
 			
-			PreparedStatement p = this.conexao.prepareStatement(comando);
-			p.setInt(1, id);
-			ResultSet rs = p.executeQuery();
+			PreparedStatement p = this.conexao.prepareStatement(comando); //prepara objeto p com a conexao e o comando cidato acima
+			p.setInt(1, id); //altera as ? do comando pelo id nas respectivas posições
+			ResultSet rs = p.executeQuery(); //Executa o comando já pronto e armazena o resultado em um obj do tipo ResultSet
 			while (rs.next()) {
 				
-				String categoria = rs.getString("categoria");
-				String modelo = rs.getString("modelo");
-				int capacidade = rs.getInt("capacidade");
-				float valor = rs.getFloat("valor");
-				int marcaId = rs.getInt("marcas_id");
+				String categoria = rs.getString("categoria"); //Pega String no campo categoria no bd
+				String modelo = rs.getString("modelo"); //Pega String no campo modelo no bd
+				int capacidade = rs.getInt("capacidade"); 	//pega int no campo capacidade no bd
+				float valor = rs.getFloat("valor");		//Pega float no campo valor no bd
+				int marcaId = rs.getInt("marcas_id");	//Pega int no campo marcas_id no bd
 				
-				produto.setId(id);
+				//Seta valores acima dentro do objeto produto
+				produto.setId(id); 
 				produto.setCategoria(categoria);
 				produto.setMarcaId(marcaId);
 				produto.setModelo(modelo);
@@ -174,7 +175,7 @@ public class JDBCProdutoDAO implements ProdutoDAO{
 			e.printStackTrace();
 		}
 		
-		return produto;
+		return produto; //Retorna objeto produto;
 		
 	}
 	

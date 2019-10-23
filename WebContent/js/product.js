@@ -188,11 +188,12 @@ $(document).ready(function(){
         })
     }
 
+    // Esta função exibe uma modal de edição de produto.
     COLDIGO.produto.exibirEdicao = function(id){
         $.ajax({
-            type: "GET",
-            url: COLDIGO.PATH + "produto/buscarPorId",
-            data: "id="+id,
+            type: "GET", //Define metodo de envio como GET
+            url: COLDIGO.PATH + "produto/buscarPorId", //define a url de envio
+            data: "id="+id, //dados transmitidos
             success: function(produto){
 
                 document.frmEditaProduto.idProduto.value = produto.id;
