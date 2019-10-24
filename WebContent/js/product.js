@@ -219,7 +219,7 @@ $(document).ready(function(){
                     modal: true,
                     buttons:{
                         "Salvar": function(){
-                            
+                            COLDIGO.produto.editar();
                         },
                         "Cancelar": function(){
                             $(this).dialog("close");
@@ -240,5 +240,33 @@ $(document).ready(function(){
         })
     }
 
+    COLDIGO.produto.editar = function(){
+
+        //Cria novo obejeto e armazena dados do formulário dentro deste objeto
+        var produto = new Object();
+        produto.id = document.frmEditaProduto.idProduto.value;
+        produto.categoria = document.frmEditaProduto.categoria.value;
+        produto.capacidade = document.frmEditaProduto.capacidade.value;
+        produto.marcaId = document.frmEditaProduto.marcaId.value;
+        produto.modelo = document.frmEditaProduto.modelo.value;
+        produto.valor = document.frmEditaProduto.valor.value;
+
+        $.ajax({
+            type:"PUT", //Define método de envio
+            url: COLDIGO.PATH + "produto/alterar", //Define url de envio
+            data: JSON.stringify(produto), //Monta dados de envio do tipo JSON
+            success: function(msg){
+
+                COLDIGO.exibirAviso(msg);   //Exibe mensagem de aviso com sucesso em caso de update completo.
+                COLDIGO.produto.buscar();   //Faz uma nova busca de produtos pra tabela
+                $("#modalEditaProduto").dialog("close"); //Fecha modal de edição
+            
+            },
+            error: function(info){
+                COLDIGO.exibirAviso("Erro ao editar produto: "+ info.status +" - "+ info.statusText); //Mostra mensagem de erro em caso de falha.
+            }
+        });
+
+    }
 
 })

@@ -7,6 +7,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -133,5 +134,42 @@ public class ProdutoREST extends UtilRest {
 			return this.buildErrorResponse(e.getMessage());
 		}
 	}
+	
+	@PUT 											//Define o método que os dados deverão ser recebidos
+	@Path("/alterar") 								//Define url que o método tem
+	@Consumes("application/*") 						//Informa que este método recebe algo do frontend
+	public Response alterar(String produtoParam) {	//Recebe produto do frontend coomo parametro
+		
+		try {
+			
+			Produto produto = new Gson().fromJson(produtoParam, Produto.class); //Converte arquivo Json recebido como parametro com o fromJson e o armazena em um objeto do tipo produto.
+			Conexao conec = new Conexao(); //Cria um novo objeto do tipo conexão
+			Connection conexao = conec.abrirConexao(); //Abre uma nova conexão com bd e armazena seus dados num objeto Connection
+			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao); //Cria uma nova instancia de JDBCPordutoDAO passando como parametro a conexao com o banco de dados.
+			 
+			boolean retorno = jdbcProduto.alterar(produto); //Chama o método alterar da classe JDBCProdutoDAO para fazer update nos dados no banco -- o seu retorno é armazenado em uma várialvel booleana
+			
+			//Verifica o retorno de alterar é verdadeiro e armazena a mensagem corrate na variavel msg
+			String msg = "";
+			if(retorno) {
+				msg = "Produto alterado com sucesso!";
+			}else {
+				msg = "Erro ao alterar produto";
+			}
+			
+			//fecha conexao com banco de dados
+			conec.fecharConexao();
+			
+			//monta a response com o método buildResponse da classe UtilRest e retorna para o frontend 
+			return this.buildResponse(msg);
+			
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+			return this.buildErrorResponse(e.getMessage());
+		}
+		
+	}
+	
 
 }

@@ -9,6 +9,10 @@ $(document).ready(function() {
     $("footer").load("/ProjetoTrilhaWeb/pages/admin/general/footer.html");
     
     COLDIGO.carregaPagina = function(pagename){
+        //Remove conteudo da pagina criada pela modal do JqueryUI
+        if($(".ui.dialog"))
+        $("ui.dialog").remove();
+        //Limpa dados da tag section
         $("section").empty();
         $("section").load(pagename+"/", 
         
