@@ -93,16 +93,13 @@ public class ProdutoREST extends UtilRest {
 			
 			boolean retorno = jdbcProduto.deletar(id); //Chama o método deletar passando id como parametro e retorna um booleano
 			
-			String msg = "";
-			if(retorno){ 
-				msg = "Produto excluído com sucesso!"; //Se o retorno for verdadeiro armazena msg de sucesso
-			}else {
-				msg = "Erro ao excluir produto."; //Se não, armazena msg de erro
-			}
-			
 			conec.fecharConexao(); //fecha conexao com bd
-			
-			return this.buildResponse(msg); //monta response e retorna via json para o front-end
+			;
+			if(retorno){ 
+				return this.buildResponse("Produto excluído com sucesso!"); //monta response e retorna via json para o front-end
+			}else {
+				return this.buildErrorResponse("Erro ao excluir produto.");
+			}			
 			
 		}catch(Exception e) {
 			e.printStackTrace();

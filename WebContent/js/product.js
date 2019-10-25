@@ -121,7 +121,6 @@ $(document).ready(function(){
             url: COLDIGO.PATH + "produto/buscar",
             data: "valorBusca="+valorBusca,
             success: function(dados){
-                dados = JSON.parse(dados);
                 
                 $("#listaProdutos").html(COLDIGO.produto.exibir(dados));
 
