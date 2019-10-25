@@ -122,7 +122,7 @@ $(document).ready(function(){
             data: "valorBusca="+valorBusca,
             success: function(dados){
                 dados = JSON.parse(dados);
-
+                
                 $("#listaProdutos").html(COLDIGO.produto.exibir(dados));
 
             },
@@ -175,17 +175,38 @@ $(document).ready(function(){
 
     //Exclui o produto selecionado
     COLDIGO.produto.excluir = function(id){
-        $.ajax({
-            type: "DELETE", //Define metodo de envio
-            url: COLDIGO.PATH + "produto/excluir/"+id, //Define urexcluirexcluirl de envio e passa o valor id 
-            success: function(msg){
-                COLDIGO.exibirAviso(msg); // Exibe msg retornada do servidor em caso de sucesso
-                COLDIGO.produto.buscar(); // Atualiza lista de produtos
+
+        var modalExcluiProduto = {
+            title: "Excluir produto",
+            height: 200,
+            width: 550,
+            modal: true,
+            buttons:{
+                "Sim": function(){
+                    $.ajax({
+                        type: "DELETE", //Define metodo de envio
+                        url: COLDIGO.PATH + "produto/excluir/"+id, //Define urexcluirexcluirl de envio e passa o valor id 
+                        success: function(msg){
+                            COLDIGO.exibirAviso(msg); // Exibe msg retornada do servidor em caso de sucesso
+                            COLDIGO.produto.buscar(); // Atualiza lista de produtos
+                            $("#modalExcluiProduto").dialog("close"); //Fecha modal de edição
+                        },
+                        error: function(info){
+                            COLDIGO.exibirAviso("Erro ao excluir produto: "+info.status+" - "+info.statusText); //Exibe mensagem de erro
+                        }
+                    })
+                },
+                "Cancelar": function(){
+                    $(this).dialog("close");
+                }
             },
-            error: function(info){
-                COLDIGO.exibirAviso("Erro ao excluir produto: "+info.status+" - "+info.statusText); //Exibe mensagem de erro
+            close: function(){
+                //caso o usuário simplesmente feche a caixa de edição não acontece nada.
             }
-        })
+        }
+
+        $("#modalExcluiProduto").dialog(modalExcluiProduto);
+
     }
 
     // Esta função exibe uma modal de edição de produto.

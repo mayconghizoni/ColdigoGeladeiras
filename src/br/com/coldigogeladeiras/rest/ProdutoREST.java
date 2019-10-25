@@ -71,8 +71,8 @@ public class ProdutoREST extends UtilRest {
 			listaProdutos = jdbcProduto.buscarPorNome(nome); //Retorna lista de produtos passando "nome" como parametro do método
 			conec.fecharConexao(); // Fecha conexao
 		
-			String json = new Gson().toJson(listaProdutos); // Converte lista de produtos para String Json
-			return this.buildResponse(json); // Retorna Json para frontend
+//			String json = new Gson().toJson(listaProdutos); // Converte lista de produtos para String Json
+			return this.buildResponse(listaProdutos); // Retorna Json para frontend
 			
 		}catch(Exception e){
 			e.printStackTrace();

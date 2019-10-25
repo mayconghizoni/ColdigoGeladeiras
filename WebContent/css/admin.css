@@ -92,7 +92,7 @@ footer{
 
 /***** MODAIS *****/
 
-#modalAviso, .modalEditar{
+#modalAviso, .modalEditar, .modalExcluir{
     display: none;
 }
 
