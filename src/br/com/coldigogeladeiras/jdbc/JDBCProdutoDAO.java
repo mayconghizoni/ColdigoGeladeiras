@@ -152,7 +152,7 @@ public class JDBCProdutoDAO implements ProdutoDAO{
 			PreparedStatement p = this.conexao.prepareStatement(comando); //prepara objeto p com a conexao e o comando cidato acima
 			p.setInt(1, id); //altera as ? do comando pelo id nas respectivas posições
 			ResultSet rs = p.executeQuery(); //Executa o comando já pronto e armazena o resultado em um obj do tipo ResultSet
-			while (rs.next()) {
+			if (rs.next()) {
 				
 				String categoria = rs.getString("categoria"); //Pega String no campo categoria no bd
 				String modelo = rs.getString("modelo"); //Pega String no campo modelo no bd

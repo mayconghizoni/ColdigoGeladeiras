@@ -145,20 +145,15 @@ public class ProdutoREST extends UtilRest {
 			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao); //Cria uma nova instancia de JDBCPordutoDAO passando como parametro a conexao com o banco de dados.
 			 
 			boolean retorno = jdbcProduto.alterar(produto); //Chama o método alterar da classe JDBCProdutoDAO para fazer update nos dados no banco -- o seu retorno é armazenado em uma várialvel booleana
-			
-			//Verifica o retorno de alterar é verdadeiro e armazena a mensagem corrate na variavel msg
-			String msg = "";
-			if(retorno) {
-				msg = "Produto alterado com sucesso!";
-			}else {
-				msg = "Erro ao alterar produto";
-			}
-			
+
 			//fecha conexao com banco de dados
 			conec.fecharConexao();
 			
-			//monta a response com o método buildResponse da classe UtilRest e retorna para o frontend 
-			return this.buildResponse(msg);
+			if(retorno) {
+				return this.buildResponse("Produto alterado com sucesso!");
+			}else {
+				return this.buildErrorResponse("Erro ao alterar produto");
+			}
 			
 			
 		}catch(Exception e) {
