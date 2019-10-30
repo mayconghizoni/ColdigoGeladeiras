@@ -7,5 +7,7 @@ import br.com.coldigogeladeiras.modelo.Marca;
 public interface MarcaDAO {
 
 	public List<Marca> buscar();
+	public boolean inserir(Marca marca);
+	public List<Marca> buscarPorNome(String nome);
 	
 }

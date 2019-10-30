@@ -1,7 +1,9 @@
 package br.com.coldigogeladeiras.jdbc;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -69,4 +71,67 @@ public class JDBCMarcaDAO implements MarcaDAO{
 		return listMarcas;
 	}
 
+	
+	public boolean inserir(Marca marca) {
+		
+		String comando = "INSERT INTO marcas (id, nome) VALUES (?, ?)";
+		
+		PreparedStatement p;
+		
+		try {
+			
+			p = this.conexao.prepareStatement(comando);
+			
+			p.setInt(1, marca.getId());
+			p.setString(2, marca.getNome());
+			
+			p.execute();
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
+
+	public List<Marca> buscarPorNome(String nome) {
+		
+		//Corrigir comando
+		String comando = "SELECT * FROM marcas";
+		
+		if(!nome.equals("")) {
+			comando += "WHERE nome LIKE '%"+nome+"%' ";
+		}
+		
+		comando+= "ORDEM BY nome ASC";
+		
+		List<Marca> listaMarcas = new ArrayList<Marca>();
+		Marca marca = null;
+		
+		try {
+			
+			Statement stmt = conexao.createStatement();
+			
+			ResultSet rs = stmt.executeQuery(comando);
+			
+			while(rs.next()) {
+				marca = new Marca();
+				marca.setId(rs.getInt("id"));
+				marca.setNome(rs.getString("nome"));
+				
+				listaMarcas.add(marca);
+				
+			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}		
+		
+		return listaMarcas;
+	}
+
+	
+	
+	
 }
