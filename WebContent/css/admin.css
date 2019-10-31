@@ -148,7 +148,7 @@ section h2, section h3{
     border: 1px solid #000;
     border-collapse: collapse;
     margin: auto;
-    min-width: 50%;
+    min-width: 40%;
 }
 .listaRegistros table th{
     text-align: center;
@@ -180,4 +180,6 @@ section h2, section h3{
     height: 20px;
     cursor: pointer;
 }
-
+#listaMarcas table{
+    min-width: 20%;
+}

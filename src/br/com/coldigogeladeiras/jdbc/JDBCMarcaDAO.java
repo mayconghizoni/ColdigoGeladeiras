@@ -20,10 +20,18 @@ public class JDBCMarcaDAO implements MarcaDAO{
 	}
 
 	@Override
-	public List<Marca> buscar(){
+	public List<Marca> buscar(String nome){
+		
+		System.out.println(nome);
 		
 		//Criação da instrução SQL para busca de todas as marcas
-		String comando = "SELECT * FROM marcas";
+		String comando = "SELECT * FROM marcas ";
+		
+		if(!nome.equals("")) {
+			comando += "WHERE nome LIKE '%" + nome + "%' ";
+		}
+		
+		comando += "ORDER BY nome ASC";
 		
 		//Criação de uma lista para armazenar cada marca encontrada
 		List<Marca> listMarcas = new ArrayList<Marca>();
@@ -44,14 +52,8 @@ public class JDBCMarcaDAO implements MarcaDAO{
 				
 				//Criação de instancia da classe Marca
 				marca = new Marca();
-				
-				//Recebimento dos 2 dados retornados do bd para cada linha encontrada
-				int id = rs.getInt("id");
-				String nome = rs.getString("nome");
-				
-				//Setando no objeto marca os valores encontrados
-				marca.setId(id); 
-				marca.setNome(nome);
+				marca.setId(rs.getInt("id"));
+				marca.setNome(rs.getString("nome"));
 				
 				//Adição da instância contida no objeto Marca na lista de marcas
 				listMarcas.add(marca);
@@ -95,43 +97,6 @@ public class JDBCMarcaDAO implements MarcaDAO{
 		return true;
 	}
 
-	public List<Marca> buscarPorNome(String nome) {
-		
-		//Corrigir comando
-		String comando = "SELECT * FROM marcas";
-		
-		if(!nome.equals("")) {
-			comando += "WHERE nome LIKE '%"+nome+"%' ";
-		}
-		
-		comando+= "ORDEM BY nome ASC";
-		
-		List<Marca> listaMarcas = new ArrayList<Marca>();
-		Marca marca = null;
-		
-		try {
-			
-			Statement stmt = conexao.createStatement();
-			
-			ResultSet rs = stmt.executeQuery(comando);
-			
-			while(rs.next()) {
-				marca = new Marca();
-				marca.setId(rs.getInt("id"));
-				marca.setNome(rs.getString("nome"));
-				
-				listaMarcas.add(marca);
-				
-			}
-			
-		}catch(Exception e) {
-			e.printStackTrace();
-		}		
-		
-		return listaMarcas;
-	}
-
-	
 	
 	
 }

@@ -24,8 +24,9 @@ public class MarcaRest extends UtilRest{
 
 	@GET
 	@Path("/buscar")
+	@Consumes("application/*")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response buscar() {
+	public Response buscar(@QueryParam("valorBusca") String nome) {
 		
 		try {
 			List<Marca> listaMarcas = new ArrayList<Marca>();
@@ -33,9 +34,12 @@ public class MarcaRest extends UtilRest{
 			Conexao conec = new Conexao();//Instancia o objeto conec com os parâmetros da conexão com o bd
 			Connection conexao = conec.abrirConexao();
 			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);// Instancia objeto jdbcMarca para executar as instruções SQL 
-			listaMarcas = jdbcMarca.buscar(); // Armazena os dados retirados do método buscar () na listaMarcar 
+			listaMarcas = jdbcMarca.buscar(nome); // Armazena os dados retirados do método buscar () na listaMarcar 
+			
 			conec.fecharConexao();
+			
 			return this.buildResponse(listaMarcas); //Retorna lista de marcas armazenadas em um JSON
+			
 		}catch(Exception e){
 			e.printStackTrace();
 			return this.buildErrorResponse(e.getMessage());
@@ -71,32 +75,6 @@ public class MarcaRest extends UtilRest{
 			e.printStackTrace();
 			return this.buildErrorResponse(e.getMessage());
 		}
-	}
-	
-	
-	@GET
-	@Path("/buscar")
-	@Consumes("application/*")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response buscarPorNome(@QueryParam("valorBusca") String nome) {
-		
-		try {
-			
-			List<Marca> listaMarcas = new ArrayList<Marca>();
-			
-			Conexao conec = new Conexao();
-			Connection conexao = conec.abrirConexao();
-			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
-			listaMarcas = jdbcMarca.buscarPorNome(nome);
-			conec.fecharConexao();
-			
-			return this.buildResponse(listaMarcas);
-			
-		}catch(Exception e) {
-			e.printStackTrace();
-			return this.buildErrorResponse(e.getMessage());
-		}
-	}
-	
+	}	
 
 }

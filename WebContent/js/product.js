@@ -14,6 +14,7 @@ $(document).ready(function(){
         $.ajax({
             type: "GET",
             url: COLDIGO.PATH + "marca/buscar",
+            data: "valorBusca=",
             success: function(marcas) {
                 if (marcas!=""){
 
