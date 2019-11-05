@@ -67,7 +67,7 @@ $(document).ready(function() {
                 tabela +=  "<tr>" +
                 "<td>"+listaDeMarcas[i].nome+"</td>"+
                 "<td>" +
-                    "<a><img src='../../imgs/edit.png' alt='Editar registro'></a>" +
+                    "<a onclick=\"COLDIGO.marcas.exibirEdicao('"+listaDeMarcas[i].id+"')\"><img src='../../imgs/edit.png' alt='Editar registro'></a>" +
                     "<a onclick=\"COLDIGO.marcas.excluir('"+listaDeMarcas[i].id+"')\"><img src='../../imgs/delete.png' alt='Deletar registro'></a>" +
                 "</td>" +
                 "</tr>"
@@ -114,6 +114,71 @@ $(document).ready(function() {
         }
         
         $("#modalExcluiMarca").dialog(modalExcluiMarca);
+
+    }
+
+    COLDIGO.marcas.exibirEdicao = function(id) {
+        $.ajax({
+            type: "GET", //Define metodo de envio como GET
+            url: COLDIGO.PATH + "marca/buscarPorId", //define a url de envio
+            data: "id="+id, //dados transmitidos
+            success: function(marca){
+
+                document.frmEditaMarca.idMarca.value = marca.id
+                document.frmEditaMarca.nomeMarca.value = marca.nome
+
+                //Criar modal 
+
+                var modalEditaMarca = {
+                    title: "Editar Marca",
+                    height: 200,
+                    width: 450,
+                    modal: true,
+                    buttons:{
+                        "Salvar": function(){
+                            COLDIGO.marcas.editar();
+                        },
+                        "Cancelar": function() {
+                            $(this).dialog("close");
+                        }
+                    },
+                    close: function(){
+                        //Fazer nada
+                    }
+                }
+
+                $("#modalEditaMarca").dialog(modalEditaMarca);
+                
+            },
+
+            error: function(info){
+                COLDIGO.exibirAviso("Erro ao buscar produto para edição: "+info.status+" - "+ info.statusText);
+            }
+        })
+        
+    }
+
+    COLDIGO.marcas.editar = function(){
+
+        var marca = new Object();
+        marca.id = document.frmEditaMarca.idMarca.value;
+        marca.nome = document.frmEditaMarca.nomeMarca.value;
+        
+        $.ajax({
+            type: "PUT",
+            url: COLDIGO.PATH + "marca/alterar",
+            data: JSON.stringify(marca),
+            success: function(msg){
+                
+                COLDIGO.exibirAviso(msg);
+                COLDIGO.marcas.buscar();
+                $("#modalEditaMarca").dialog("close");
+
+            },
+            error: function(info){
+                COLDIGO.exibirAviso("Erro ao editar produto: "+ info.status +" - "+ info.statusText);
+            }
+        })
 
     }
 

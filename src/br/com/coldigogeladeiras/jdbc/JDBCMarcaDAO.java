@@ -144,4 +144,52 @@ public class JDBCMarcaDAO implements MarcaDAO{
 		}
 	}
 	
+	public Marca buscarPorId(int id) {
+		
+		String comando = "SELECT * FROM marcas WHERE marcas.id = ?";
+		Marca marca = new Marca();
+		
+		try {
+			
+			PreparedStatement p = this.conexao.prepareStatement(comando);
+			p.setInt(1, id);
+			ResultSet rs = p.executeQuery();
+			
+			if(rs.next()) {
+				
+				marca.setId(id);
+				marca.setNome(rs.getString("nome"));
+				
+			}
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return marca;
+	}
+	
+	@Override
+	public boolean alterar(Marca marca) {
+		
+		String comando = "UPDATE marcas SET nome=? WHERE id=?";
+		PreparedStatement p;
+		
+		try {
+			
+			p = this.conexao.prepareStatement(comando);
+			
+			p.setString(1, marca.getNome());
+			p.setInt(2, marca.getId());
+			
+			p.executeUpdate();
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
+	
 }

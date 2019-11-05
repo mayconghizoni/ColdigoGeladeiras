@@ -10,4 +10,6 @@ public interface MarcaDAO {
 	public boolean inserir(Marca marca);
 	public boolean deletar(int id);
 	public boolean verificaIntegridade(int id);
+	public Marca buscarPorId(int id);
+	public boolean alterar(Marca marca);
 }
