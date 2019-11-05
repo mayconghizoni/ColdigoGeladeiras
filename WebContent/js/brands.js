@@ -17,6 +17,7 @@ $(document).ready(function() {
                 data: JSON.stringify(marca),
                 success: function (msg) {
                     COLDIGO.exibirAviso(msg);
+                    COLDIGO.marcas.buscar();
                     $("#addMarca").trigger("reset");
                 },
                 error: function (info) {
@@ -39,8 +40,6 @@ $(document).ready(function() {
             url: COLDIGO.PATH + "marca/buscar",
             data: "valorBusca="+valorBusca,
             success: function(dados){
-                
-                console.log(dados);
                 
                 $("#listaMarcas").html(COLDIGO.marcas.exibir(dados));           
 
@@ -69,7 +68,7 @@ $(document).ready(function() {
                 "<td>"+listaDeMarcas[i].nome+"</td>"+
                 "<td>" +
                     "<a><img src='../../imgs/edit.png' alt='Editar registro'></a>" +
-                    "<a><img src='../../imgs/delete.png' alt='Deletar registro'></a>" +
+                    "<a onclick=\"COLDIGO.marcas.excluir('"+listaDeMarcas[i].id+"')\"><img src='../../imgs/delete.png' alt='Deletar registro'></a>" +
                 "</td>" +
                 "</tr>"
             }
@@ -80,6 +79,42 @@ $(document).ready(function() {
         tabela += "</table>";
 
         return tabela;
+    }
+
+    COLDIGO.marcas.excluir = function (id) {
+
+        var modalExcluiMarca = {
+            title: "Excluir marca",
+            height: 200,
+            width: 550,
+            modal: true,
+            buttons: {
+                "Sim": function () {
+                    $.ajax({
+                        type: "DELETE", //Define metodo de envio
+                        url: COLDIGO.PATH + "marca/excluir/"+id, //Define url de envio e passa o valor id 
+                        success: function(msg){
+                            COLDIGO.exibirAviso(msg); // Exibe msg retornada do servidor em caso de sucesso
+                            COLDIGO.marcas.buscar(); // Atualiza lista de produtos
+                            $("#modalExcluiMarca").dialog("close"); //Fecha modal de edição
+                        },
+                        error: function(info){
+                            COLDIGO.exibirAviso("Erro! "+info.responseText); //Exibe mensagem de erro
+                            $("#modalExcluiMarca").dialog("close"); //Fecha modal de edição
+                        }
+                    })
+                },
+                "Cancelar": function () {
+                    $(this).dialog("close");
+                }
+            },
+            close: function() {
+                
+            }
+        }
+        
+        $("#modalExcluiMarca").dialog(modalExcluiMarca);
+
     }
 
     

@@ -5,9 +5,11 @@ import java.sql.Connection;
 import java.util.ArrayList;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -75,6 +77,43 @@ public class MarcaRest extends UtilRest{
 			e.printStackTrace();
 			return this.buildErrorResponse(e.getMessage());
 		}
-	}	
+	}
+	
+	@DELETE
+	@Path("/excluir/{id}")
+	@Consumes("application/*")
+	public Response excluir(@PathParam("id") int id) {
+		
+		Conexao conec = new Conexao();
+		Connection conexao = conec.abrirConexao();
+		JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
+		
+		boolean retornoIntegridade = jdbcMarca.verificaIntegridade(id);
+		
+		if(retornoIntegridade) {
+			try {
+				
+				boolean retorno = jdbcMarca.deletar(id);
+				
+				conec.fecharConexao();
+				
+				if(retorno){
+					return this.buildResponse("Marca excluída com sucesso!");
+				}else{
+					return this.buildErrorResponse("Erro ao excluir marca!");
+				}
+				
+			}catch(Exception e) {
+				e.printStackTrace();
+				return this.buildErrorResponse(e.getMessage());
+			}
+		}else {
+			conec.fecharConexao();
+			return this.buildErrorResponse("Existem produtos cadastrados com essa marca. Não será possivel deletar a marca escolhida!");
+		}
+		
+		
+		
+	}
 
 }

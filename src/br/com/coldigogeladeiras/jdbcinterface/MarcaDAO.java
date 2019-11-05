@@ -8,5 +8,6 @@ public interface MarcaDAO {
 
 	public List<Marca> buscar(String nome);
 	public boolean inserir(Marca marca);
-	
+	public boolean deletar(int id);
+	public boolean verificaIntegridade(int id);
 }

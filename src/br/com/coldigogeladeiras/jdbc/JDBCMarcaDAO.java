@@ -96,7 +96,52 @@ public class JDBCMarcaDAO implements MarcaDAO{
 		
 		return true;
 	}
-
 	
+	public boolean deletar(int id) {
+		
+		String comando = "DELETE FROM marcas WHERE id = ?";
+		PreparedStatement p;
+		
+		try {
+			
+			p = this.conexao.prepareStatement(comando);
+			p.setInt(1, id);
+			p.execute();
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public boolean verificaIntegridade(int id) {
+		
+		String comando = "SELECT count(*) as cont_produtos FROM produtos WHERE marcas_id = ?";
+		PreparedStatement p;
+		int contagem = 0;
+		
+		try {
+			
+			p = this.conexao.prepareStatement(comando);
+			p.setInt(1, id);			
+			ResultSet rs = p.executeQuery();
+			
+			if(rs.next()){
+				contagem = rs.getInt("cont_produtos");
+			}
+			
+			if(contagem > 0) {
+				return false;
+			}else {
+				return true;
+			}
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 	
 }
