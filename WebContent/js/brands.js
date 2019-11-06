@@ -127,6 +127,9 @@ $(document).ready(function() {
                 document.frmEditaMarca.idMarca.value = marca.id
                 document.frmEditaMarca.nomeMarca.value = marca.nome
 
+                console.log(marca);
+                
+
                 //Criar modal 
 
                 var modalEditaMarca = {
