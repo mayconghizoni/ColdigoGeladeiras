@@ -63,17 +63,15 @@ public class MarcaRest extends UtilRest{
 			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
 			boolean retorno = jdbcMarca.inserir(marca);
 			
-			String msg = "";
-			
-			if (retorno) {
-				msg = "Produto cadastrado com sucesso!";
-			}else {
-				msg = "Erro ao cadastrar produto!";
-			}
-			
 			conec.fecharConexao();
 			
-			return this.buildResponse(msg);
+			if (retorno) {
+				return this.buildResponse("Produto cadastrado com sucesso!");
+			}else {
+				return this.buildErrorResponse("Erro ao cadastrar marca!");
+			}			
+			
+
 		}catch(Exception e) {
 			e.printStackTrace();
 			return this.buildErrorResponse(e.getMessage());
@@ -118,12 +116,10 @@ public class MarcaRest extends UtilRest{
 	}
 	
 	@GET
-	@Path("/buscarPorId")
+	@Path("/buscarPorId/{id}")
 	@Consumes("application/*")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response buscarPorId(@QueryParam("id") int id) {
-		
-		System.out.println(id);
+	public Response buscarPorId(@PathParam("id") int id) {
 		
 		try {
 			Marca marca = new Marca();

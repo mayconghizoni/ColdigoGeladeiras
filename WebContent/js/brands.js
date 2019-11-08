@@ -21,7 +21,8 @@ $(document).ready(function() {
                     $("#addMarca").trigger("reset");
                 },
                 error: function (info) {
-                    COLDIGO.exibirAviso("Erro ao cadastrar produto: "+info.status+" - " + info.statusText)
+                    
+                    COLDIGO.exibirAviso("Erro ao cadastrar marca: "+info.status+" - " + info.statusText)
                 }
             })
 
@@ -120,17 +121,11 @@ $(document).ready(function() {
     COLDIGO.marcas.exibirEdicao = function(id) {
         $.ajax({
             type: "GET", //Define metodo de envio como GET
-            url: COLDIGO.PATH + "marca/buscarPorId", //define a url de envio
-            data: "id="+id, //dados transmitidos
+            url: COLDIGO.PATH + "marca/buscarPorId/"+id, //define a url de envio
             success: function(marca){
 
                 document.frmEditaMarca.idMarca.value = marca.id
                 document.frmEditaMarca.nomeMarca.value = marca.nome
-
-                console.log(marca);
-                
-
-                //Criar modal 
 
                 var modalEditaMarca = {
                     title: "Editar Marca",
