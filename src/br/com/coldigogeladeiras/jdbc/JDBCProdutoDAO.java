@@ -212,5 +212,35 @@ public class JDBCProdutoDAO implements ProdutoDAO{
 		
 		return true;
 	}
+
+	@Override
+	public boolean verificaExistencia(int id) {
+		
+		String comando = "SELECT count(*) as cont_produtos FROM produtos WHERE id = ?";
+		PreparedStatement p;
+		int contagem = 0;
+		
+		try {
+			
+			p = this.conexao.prepareStatement(comando);
+			p.setInt(1, id);
+			ResultSet rs = p.executeQuery();
+			
+			if(rs.next()){
+				contagem = rs.getInt("cont_produtos");
+			}
+			
+			if(contagem > 0) {
+				return true;
+			}else {
+				return false;
+			}
+						
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+			return false;
+		}
+	}
 	
 }

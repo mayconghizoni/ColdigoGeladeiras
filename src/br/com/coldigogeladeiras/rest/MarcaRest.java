@@ -132,11 +132,18 @@ public class MarcaRest extends UtilRest{
 			Connection conexao = conec.abrirConexao();
 			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
 			
-			marca = jdbcMarca.buscarPorId(id);
+			boolean retornoExistencia = jdbcMarca.verificaExistencia(id);
 			
-			conec.fecharConexao();
-			
-			return this.buildResponse(marca);
+			if(retornoExistencia) {
+				marca = jdbcMarca.buscarPorId(id);
+				
+				conec.fecharConexao();
+				
+				return this.buildResponse(marca);
+			}else {
+				conec.fecharConexao();
+				return this.buildErrorResponse("Esta marca não existe. Atualize a página e verifique sua existência!");
+			}
 			
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -157,14 +164,23 @@ public class MarcaRest extends UtilRest{
 			Connection conexao = conec.abrirConexao();
 			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
 			
-			boolean retorno = jdbcMarca.alterar(marca);
+			boolean retornoExistencia = jdbcMarca.verificaExistencia(marca.getId());
 			
-			conec.fecharConexao();
-			
-			if(retorno) {
-				return this.buildResponse("Marca alterada com sucesso!");
+			if(retornoExistencia) {
+				
+				boolean retorno = jdbcMarca.alterar(marca);
+				
+				conec.fecharConexao();
+				
+				if(retorno) {
+					return this.buildResponse("Marca alterada com sucesso!");
+				}else {
+					return this.buildErrorResponse("Erro ao alterar marca.");
+				}
+				
 			}else {
-				return this.buildErrorResponse("Erro ao alterar marca.");
+				conec.fecharConexao();
+				return this.buildErrorResponse("Esta marca não existe. Atualize a página e verifique sua existência!");
 			}
 			
 		}catch(Exception e){

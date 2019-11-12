@@ -101,17 +101,26 @@ public class ProdutoREST extends UtilRest {
 			
 			Conexao conec = new Conexao(); //Cria obj conec
 			Connection conexao = conec.abrirConexao(); //Abre conexao com bd
-			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao); 
+			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao);
 			
-			boolean retorno = jdbcProduto.deletar(id); //Chama o método deletar passando id como parametro e retorna um booleano
+			boolean retornoExistencia = jdbcProduto.verificaExistencia(id);
 			
-			conec.fecharConexao(); //fecha conexao com bd
-			
-			if(retorno){ 
-				return this.buildResponse("Produto excluído com sucesso!"); //monta response e retorna via json para o front-end
+			if(retornoExistencia) {
+				
+				boolean retorno = jdbcProduto.deletar(id); //Chama o método deletar passando id como parametro e retorna um booleano
+				
+				conec.fecharConexao(); //fecha conexao com bd
+				
+				if(retorno){ 
+					return this.buildResponse("Produto excluído com sucesso!"); //monta response e retorna via json para o front-end
+				}else {
+					return this.buildErrorResponse("Erro ao excluir produto.");
+				}
+				
 			}else {
-				return this.buildErrorResponse("Erro ao excluir produto.");
-			}			
+				conec.fecharConexao();
+				return this.buildErrorResponse("Este produto não existe. Atualize a página e verifique sua existência!");
+			}		
 			
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -132,11 +141,20 @@ public class ProdutoREST extends UtilRest {
 			Connection conexao = conec.abrirConexao();		//abre uma nova conexao com banco de dados a partir do método abrirConexao
 			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao); 	//instancia um objeto jdbcProduto passando como parametro pro seu Construtor o objeto conexao
 			
-			produto = jdbcProduto.buscarPorId(id); 		//A partir do método buscarPorId retorna um objeto do tipo produto e armazena no objeto produto. É passado como parâmetor o id.
+			boolean retornoExistencia = jdbcProduto.verificaExistencia(id);
 			
-			conec.fecharConexao(); 		//Fecha conexao com banco de dados
+			if(retornoExistencia) {
+				
+				produto = jdbcProduto.buscarPorId(id); 		//A partir do método buscarPorId retorna um objeto do tipo produto e armazena no objeto produto. É passado como parâmetor o id.
+				
+				conec.fecharConexao(); 		//Fecha conexao com banco de dados
+				
+				return this.buildResponse(produto); //Com o método buildResponse monta a response no tipo JSon e retorna para o front. Passando como parametro o objeto produto.
 			
-			return this.buildResponse(produto); //Com o método buildResponse monta a response no tipo JSon e retorna para o front. Passando como parametro o objeto produto.
+			}else {
+				conec.fecharConexao();
+				return this.buildErrorResponse("Este produto não existe. Atualize a página e verifique sua existência!");
+			}
 			
 		}catch(Exception e) {
 			e.printStackTrace();
@@ -155,18 +173,26 @@ public class ProdutoREST extends UtilRest {
 			Conexao conec = new Conexao(); //Cria um novo objeto do tipo conexão
 			Connection conexao = conec.abrirConexao(); //Abre uma nova conexão com bd e armazena seus dados num objeto Connection
 			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao); //Cria uma nova instancia de JDBCPordutoDAO passando como parametro a conexao com o banco de dados.
-			 
-			boolean retorno = jdbcProduto.alterar(produto); //Chama o método alterar da classe JDBCProdutoDAO para fazer update nos dados no banco -- o seu retorno é armazenado em uma várialvel booleana
+			
+			boolean retornoExistencia = jdbcProduto.verificaExistencia(produto.getId());
+			
+			if(retornoExistencia) {
+				
+				boolean retorno = jdbcProduto.alterar(produto); //Chama o método alterar da classe JDBCProdutoDAO para fazer update nos dados no banco -- o seu retorno é armazenado em uma várialvel booleana
 
-			//fecha conexao com banco de dados
-			conec.fecharConexao();
-			
-			if(retorno) {
-				return this.buildResponse("Produto alterado com sucesso!");
+				//fecha conexao com banco de dados
+				conec.fecharConexao();
+				
+				if(retorno) {
+					return this.buildResponse("Produto alterado com sucesso!");
+				}else {
+					return this.buildErrorResponse("Erro ao alterar produto");
+				}
+				
 			}else {
-				return this.buildErrorResponse("Erro ao alterar produto");
-			}
-			
+				conec.fecharConexao();
+				return this.buildErrorResponse("Este produto não existe. Atualize a página e verifique sua existência!");
+			}			
 			
 		}catch(Exception e) {
 			e.printStackTrace();

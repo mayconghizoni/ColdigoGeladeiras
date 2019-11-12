@@ -150,7 +150,8 @@ $(document).ready(function() {
             },
 
             error: function(info){
-                COLDIGO.exibirAviso("Erro ao buscar produto para edição: "+info.status+" - "+ info.statusText);
+                COLDIGO.exibirAviso("Erro! "+info.responseText);
+                $("#modalEditaMarca").dialog(modalEditaMarca);
             }
         })
         
@@ -174,7 +175,8 @@ $(document).ready(function() {
 
             },
             error: function(info){
-                COLDIGO.exibirAviso("Erro ao editar produto: "+ info.status +" - "+ info.statusText);
+                COLDIGO.exibirAviso("Erro! "+info.responseText);
+                $("#modalEditaMarca").dialog("close");
             }
         })
 
