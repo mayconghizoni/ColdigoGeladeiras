@@ -104,7 +104,7 @@ $(document).ready(function(){
                     $("#addProduto").trigger("reset");
                 },
                 error: function(info){
-                    COLDIGO.exibirAviso("Erro ao cadastrar produto: "+info.status+" - " + info.statusText)
+                    COLDIGO.exibirAviso("Erro! "+info.responseText)
                 }
             })
 

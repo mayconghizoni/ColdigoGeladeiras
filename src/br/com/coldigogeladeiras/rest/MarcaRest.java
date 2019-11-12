@@ -87,31 +87,36 @@ public class MarcaRest extends UtilRest{
 		Connection conexao = conec.abrirConexao();
 		JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
 		
-		boolean retornoIntegridade = jdbcMarca.verificaIntegridade(id);
+		boolean retornoExistencia = jdbcMarca.verificaExistencia(id);
 		
-		if(retornoIntegridade) {
-			try {
-				
-				boolean retorno = jdbcMarca.deletar(id);
-				
-				conec.fecharConexao();
-				
-				if(retorno){
-					return this.buildResponse("Marca excluída com sucesso!");
-				}else{
-					return this.buildErrorResponse("Erro ao excluir marca!");
+		if(retornoExistencia) {
+			boolean retornoIntegridade = jdbcMarca.verificaProdutosCadastrados(id);
+			
+			if(retornoIntegridade) {
+				try {
+					
+					boolean retorno = jdbcMarca.deletar(id);
+					
+					conec.fecharConexao();
+					
+					if(retorno){
+						return this.buildResponse("Marca excluída com sucesso!");
+					}else{
+						return this.buildErrorResponse("Erro ao excluir marca!");
+					}
+					
+				}catch(Exception e) {
+					e.printStackTrace();
+					return this.buildErrorResponse(e.getMessage());
 				}
-				
-			}catch(Exception e) {
-				e.printStackTrace();
-				return this.buildErrorResponse(e.getMessage());
+			}else {
+				conec.fecharConexao();
+				return this.buildErrorResponse("Existem produtos cadastrados com essa marca. Não será possivel deletar a marca escolhida!");
 			}
 		}else {
 			conec.fecharConexao();
-			return this.buildErrorResponse("Existem produtos cadastrados com essa marca. Não será possivel deletar a marca escolhida!");
+			return this.buildErrorResponse("Esta marca não existe. Atualize a página e verifique sua existência!");
 		}
-		
-		
 		
 	}
 	

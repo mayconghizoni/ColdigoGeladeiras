@@ -19,6 +19,7 @@ import com.google.gson.JsonObject;
 
 import br.com.coldigogeladeiras.bd.Conexao;
 import br.com.coldigogeladeiras.jdbc.JDBCProdutoDAO;
+import br.com.coldigogeladeiras.jdbc.JDBCMarcaDAO;
 import br.com.coldigogeladeiras.modelo.Produto;
 
 
@@ -29,26 +30,37 @@ public class ProdutoREST extends UtilRest {
 	@Path("/inserir")
 	@Consumes("application/*")
 	public Response inserir(String produtoParam) {
+		
 		try {
 			
 			Produto produto = new Gson().fromJson(produtoParam, Produto.class); //Converte o JSON recebido para um objeto	
 			Conexao conec = new Conexao(); 
 			Connection conexao = conec.abrirConexao(); //Inicia conexao com o BD
 			
-			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao); 
-			boolean retorno = jdbcProduto.inserir(produto); //O objeto jdbcProduto faz a inserção no bd e armazena o resultado num booleano
+			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
+			boolean retornoExistencia = jdbcMarca.verificaExistencia(produto.getMarcaId());
 			
-			String msg = "";
-			
-			if(retorno == true) { //Verifica se o valor retornado é true e armazena a mensagem a ser retonada pro cliente numa String
-				msg = "Produto cadastrado com sucesso!"; 
-			} else {
-				msg = "Erro ao cadastrar produto!";
+			if(retornoExistencia) {
+				
+				JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao); 
+				boolean retorno = jdbcProduto.inserir(produto); //O objeto jdbcProduto faz a inserção no bd e armazena o resultado num booleano
+				
+				String msg = "";
+				
+				if(retorno == true) { //Verifica se o valor retornado é true e armazena a mensagem a ser retonada pro cliente numa String
+					msg = "Produto cadastrado com sucesso!"; 
+				} else {
+					msg = "Erro ao cadastrar produto!";
+				}
+				
+				conec.fecharConexao(); // Fecha conexao com BD
+				
+				return this.buildResponse(msg); // Converte a mensagem para formato JSON e retorna esse valor
+				
+			}else {
+				conec.fecharConexao();
+				return this.buildErrorResponse("Marca seleciona não existe. Atualize a página do seu navegador e tente novamente. ");
 			}
-			
-			conec.fecharConexao(); // Fecha conexao com BD
-			
-			return this.buildResponse(msg); // Converte a mensagem para formato JSON e retorna esse valor
 			
 		}catch(Exception e){
 			e.printStackTrace();

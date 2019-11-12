@@ -9,7 +9,8 @@ public interface MarcaDAO {
 	public List<Marca> buscar(String nome);
 	public boolean inserir(Marca marca);
 	public boolean deletar(int id);
-	public boolean verificaIntegridade(int id);
+	public boolean verificaExistencia(int id);
+	public boolean verificaProdutosCadastrados(int id);
 	public Marca buscarPorId(int id);
 	public boolean alterar(Marca marca);
 }
