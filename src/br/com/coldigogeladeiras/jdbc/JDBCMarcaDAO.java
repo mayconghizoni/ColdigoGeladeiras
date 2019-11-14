@@ -54,6 +54,7 @@ public class JDBCMarcaDAO implements MarcaDAO{
 				marca = new Marca();
 				marca.setId(rs.getInt("id"));
 				marca.setNome(rs.getString("nome"));
+				marca.setStatus(rs.getInt("status"));
 				
 				//Adição da instância contida no objeto Marca na lista de marcas
 				listMarcas.add(marca);
@@ -222,6 +223,58 @@ public class JDBCMarcaDAO implements MarcaDAO{
 		}
 		
 		return true;
+	}
+
+	public boolean ativoInativo(int status, int id) {
+		
+		String comando = "UPDATE marcas SET status=? WHERE id=?";
+		PreparedStatement p;
+		
+		try {
+			
+			p = this.conexao.prepareStatement(comando);
+			p.setInt(1, status);
+			p.setInt(2, id);
+			
+			p.executeUpdate();
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		return true;
+		
+	}
+
+	@Override
+	public boolean verificaStatus(int id) {
+		
+		String comando = "SELECT marcas.status FROM marcas WHERE id=?";
+		PreparedStatement p;
+		int status = 3;
+		
+		try {
+			
+			p = this.conexao.prepareStatement(comando);
+			p.setInt(1, id);
+			ResultSet rs = p.executeQuery();
+			
+			if(rs.next()) {
+				status = rs.getInt("status");
+			}
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+		if(status == 1) {
+			return true;
+		}else {
+			return false;
+		}
+		
 	}
 	
 }

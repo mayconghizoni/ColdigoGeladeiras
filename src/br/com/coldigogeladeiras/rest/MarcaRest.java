@@ -190,6 +190,58 @@ public class MarcaRest extends UtilRest{
 		
 	}
 	
+	@PUT
+	@Path("/alterarStatus/{id}")
+	@Consumes("application/*")
+	public Response alterarStatus(@PathParam("id") int id) {
+		
+		Conexao conec = new Conexao();
+		Connection conexao = conec.abrirConexao();
+		JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
+		
+		boolean retornoExistencia = jdbcMarca.verificaExistencia(id);
+		
+		if(retornoExistencia) {
+			boolean retornoIntegridade = jdbcMarca.verificaProdutosCadastrados(id);
+			
+			if(retornoIntegridade) {
+				try {
+					
+					boolean ativo = jdbcMarca.verificaStatus(id);
+					
+					int statusAtualizado;
+					
+					if(ativo) {
+						statusAtualizado = 0;
+					}else {
+						statusAtualizado = 1;
+					}
+					
+					boolean retorno = jdbcMarca.ativoInativo(statusAtualizado, id);
+					
+					conec.fecharConexao();
+					
+					if(retorno){
+						return this.buildResponse("Status alterado com sucesso!");
+					}else{
+						return this.buildErrorResponse("Erro ao alterar status da marca!");
+					}
+					
+				}catch(Exception e) {
+					e.printStackTrace();
+					return this.buildErrorResponse(e.getMessage());
+				}
+			}else {
+				conec.fecharConexao();
+				return this.buildErrorResponse("Existem produtos cadastrados com essa marca. Não será possivel deixá-la inativa!");
+			}
+		}else {
+			conec.fecharConexao();
+			return this.buildErrorResponse("Esta marca não existe. Atualize a página e verifique sua existência!");
+		}
+	
+	}
+	
 	
 	
 	

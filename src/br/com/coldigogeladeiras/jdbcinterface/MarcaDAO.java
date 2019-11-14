@@ -13,4 +13,6 @@ public interface MarcaDAO {
 	public boolean verificaProdutosCadastrados(int id);
 	public Marca buscarPorId(int id);
 	public boolean alterar(Marca marca);
+	public boolean ativoInativo(int status, int id);
+	public boolean verificaStatus(int id);
 }

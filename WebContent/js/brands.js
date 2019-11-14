@@ -40,8 +40,8 @@ $(document).ready(function() {
             type: "GET",
             url: COLDIGO.PATH + "marca/buscar",
             data: "valorBusca="+valorBusca,
-            success: function(dados){
-                
+            success: function(dados){                
+
                 $("#listaMarcas").html(COLDIGO.marcas.exibir(dados));           
 
             },
@@ -58,6 +58,7 @@ $(document).ready(function() {
         
         var tabela = "<table>" +
         "<tr>"+
+        "<th>Status</th>"+
         "<th>Nome das marcas</th>" +
         "<th class='acoes'>Ações</th>" +
         "</tr>";
@@ -65,7 +66,23 @@ $(document).ready(function() {
         if(listaDeMarcas != undefined && listaDeMarcas.length > 0){
 
             for (var i=0; i<listaDeMarcas.length; i++){
+
+                var status = "";
+                if (listaDeMarcas[i].status == 1){
+                    status = "checked";
+                }
+                    
                 tabela +=  "<tr>" +
+                "<td>"+
+                    "<div class=\"onoffswitch\" >"+
+                        "<input type=\"checkbox\" name=\""+listaDeMarcas[i].nome+"\" class=\"onoffswitch-checkbox\" id=\""+listaDeMarcas[i].id+"\" onclick=\"COLDIGO.marcas.ativoInativo('"+listaDeMarcas[i].id+"')\" "+status+">"+
+                        "<label class=\"onoffswitch-label\" for=\""+listaDeMarcas[i].id+"\">" +
+                            "<span class=\"onoffswitch-inner\"></span>"+
+                            "<span class=\"onoffswitch-switch\"></span>"+
+                        "</label>"+
+                    "</div>"+
+        
+                "</td>"+
                 "<td>"+listaDeMarcas[i].nome+"</td>"+
                 "<td>" +
                     "<a onclick=\"COLDIGO.marcas.exibirEdicao('"+listaDeMarcas[i].id+"')\"><img src='../../imgs/edit.png' alt='Editar registro'></a>" +
@@ -182,5 +199,19 @@ $(document).ready(function() {
 
     }
 
+    COLDIGO.marcas.ativoInativo = function(id, checkbox){
+        
+        $.ajax({
+            type: "PUT", //Define metodo de envio
+            url: COLDIGO.PATH + "marca/alterarStatus/"+id, //Define url de envio e passa o valor id 
+            success: function(msg){
+                COLDIGO.exibirAviso(msg); // Exibe msg retornada do servidor em caso de sucesso
+            },
+            error: function(info){
+                COLDIGO.exibirAviso("Erro! "+info.responseText); //Exibe mensagem de erro
+            }
+        })
+
+    }
     
 })
