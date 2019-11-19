@@ -11,10 +11,12 @@ $(document).ready(function(){
             select = "#selMarca";
         }
 
+        var statusAtivo = 1;
+
         $.ajax({
             type: "GET",
             url: COLDIGO.PATH + "marca/buscar",
-            data: "valorBusca=",
+            data: "valorBusca="+statusAtivo,
             success: function(marcas) {
                 if (marcas!=""){
 

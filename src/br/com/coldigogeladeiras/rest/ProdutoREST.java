@@ -45,17 +45,13 @@ public class ProdutoREST extends UtilRest {
 				JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao); 
 				boolean retorno = jdbcProduto.inserir(produto); //O objeto jdbcProduto faz a inserção no bd e armazena o resultado num booleano
 				
-				String msg = "";
-				
-				if(retorno == true) { //Verifica se o valor retornado é true e armazena a mensagem a ser retonada pro cliente numa String
-					msg = "Produto cadastrado com sucesso!"; 
-				} else {
-					msg = "Erro ao cadastrar produto!";
-				}
-				
 				conec.fecharConexao(); // Fecha conexao com BD
 				
-				return this.buildResponse(msg); // Converte a mensagem para formato JSON e retorna esse valor
+				if(retorno == true) { //Verifica se o valor retornado é true e armazena a mensagem a ser retonada pro cliente numa String
+					return this.buildResponse("Produto cadastrado com sucesso!"); 
+				} else {
+					return this.buildErrorResponse("Erro ao cadastrar produto!");
+				}
 				
 			}else {
 				conec.fecharConexao();

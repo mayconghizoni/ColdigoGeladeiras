@@ -20,15 +20,15 @@ public class JDBCMarcaDAO implements MarcaDAO{
 	}
 
 	@Override
-	public List<Marca> buscar(String nome){
-		
-		System.out.println(nome);
+	public List<Marca> buscar(String param){
 		
 		//Criação da instrução SQL para busca de todas as marcas
 		String comando = "SELECT * FROM marcas ";
 		
-		if(!nome.equals("")) {
-			comando += "WHERE nome LIKE '%" + nome + "%' ";
+		if(!param.equals("") && !param.equals("1")) {
+			comando += "WHERE nome LIKE '%" + param + "%' ";
+		}else if (param.equals("1")){
+			comando += "WHERE status LIKE '%" + param + "%' ";
 		}
 		
 		comando += "ORDER BY nome ASC";

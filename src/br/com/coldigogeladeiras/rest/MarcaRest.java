@@ -29,15 +29,16 @@ public class MarcaRest extends UtilRest{
 	@Path("/buscar")
 	@Consumes("application/*")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response buscar(@QueryParam("valorBusca") String nome) {
+	public Response buscar(@QueryParam("valorBusca") String param) {
 		
 		try {
+			
 			List<Marca> listaMarcas = new ArrayList<Marca>();
 			
 			Conexao conec = new Conexao();//Instancia o objeto conec com os parâmetros da conexão com o bd
 			Connection conexao = conec.abrirConexao();
 			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);// Instancia objeto jdbcMarca para executar as instruções SQL 
-			listaMarcas = jdbcMarca.buscar(nome); // Armazena os dados retirados do método buscar () na listaMarcar 
+			listaMarcas = jdbcMarca.buscar(param); // Armazena os dados retirados do método buscar na listaMarcar 
 			
 			conec.fecharConexao();
 			

@@ -199,7 +199,7 @@ $(document).ready(function() {
 
     }
 
-    COLDIGO.marcas.ativoInativo = function(id, checkbox){
+    COLDIGO.marcas.ativoInativo = function(id){
         
         $.ajax({
             type: "PUT", //Define metodo de envio
@@ -209,6 +209,8 @@ $(document).ready(function() {
             },
             error: function(info){
                 COLDIGO.exibirAviso("Erro! "+info.responseText); //Exibe mensagem de erro
+                document.getElementById(id).checked=!document.getElementById(id).checked;                
+
             }
         })
 
