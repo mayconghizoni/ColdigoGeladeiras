@@ -12,4 +12,5 @@ public interface ProdutoDAO {
 	public Produto buscarPorId(int id);
 	public boolean alterar(Produto produto);
 	public boolean verificaExistencia(int id);
+	public boolean verificaProdutoDuplicado(Produto produto);
 }

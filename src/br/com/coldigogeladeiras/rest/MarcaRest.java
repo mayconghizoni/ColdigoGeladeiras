@@ -60,18 +60,24 @@ public class MarcaRest extends UtilRest{
 			Marca marca = new Gson().fromJson(marcaParam, Marca.class);
 			Conexao conec = new Conexao();
 			Connection conexao = conec.abrirConexao();
-			
 			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
-			boolean retorno = jdbcMarca.inserir(marca);
+
+			boolean retornoMarcaDuplicada = jdbcMarca.verificaMarcaDuplicada(marca);
 			
-			conec.fecharConexao();
-			
-			if (retorno) {
-				return this.buildResponse("Produto cadastrado com sucesso!");
+			if(retornoMarcaDuplicada) {
+				boolean retorno = jdbcMarca.inserir(marca);
+				
+				conec.fecharConexao();
+				
+				if (retorno) {
+					return this.buildResponse("Marca cadastrado com sucesso!");
+				}else {
+					return this.buildErrorResponse("Erro ao cadastrar marca!");
+				}			
 			}else {
-				return this.buildErrorResponse("Erro ao cadastrar marca!");
-			}			
-			
+				conec.fecharConexao();
+				return this.buildErrorResponse("Marca já existente. Tente novamente!");
+			}
 
 		}catch(Exception e) {
 			e.printStackTrace();

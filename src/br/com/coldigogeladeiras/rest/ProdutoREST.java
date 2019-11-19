@@ -36,26 +36,37 @@ public class ProdutoREST extends UtilRest {
 			Produto produto = new Gson().fromJson(produtoParam, Produto.class); //Converte o JSON recebido para um objeto	
 			Conexao conec = new Conexao(); 
 			Connection conexao = conec.abrirConexao(); //Inicia conexao com o BD
+			JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao); 
 			
-			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);
-			boolean retornoExistencia = jdbcMarca.verificaExistencia(produto.getMarcaId());
+			boolean retornoProdutoDuplicado = jdbcProduto.verificaProdutoDuplicado(produto);
 			
-			if(retornoExistencia) {
+			if(retornoProdutoDuplicado) {
 				
-				JDBCProdutoDAO jdbcProduto = new JDBCProdutoDAO(conexao); 
-				boolean retorno = jdbcProduto.inserir(produto); //O objeto jdbcProduto faz a inserção no bd e armazena o resultado num booleano
+				JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);		
+				boolean retornoExistencia = jdbcMarca.verificaExistencia(produto.getMarcaId());
 				
-				conec.fecharConexao(); // Fecha conexao com BD
-				
-				if(retorno == true) { //Verifica se o valor retornado é true e armazena a mensagem a ser retonada pro cliente numa String
-					return this.buildResponse("Produto cadastrado com sucesso!"); 
-				} else {
-					return this.buildErrorResponse("Erro ao cadastrar produto!");
+				if(retornoExistencia) {
+					
+					boolean retorno = jdbcProduto.inserir(produto); //O objeto jdbcProduto faz a inserção no bd e armazena o resultado num booleano
+					
+					conec.fecharConexao(); // Fecha conexao com BD
+					
+					if(retorno == true) { //Verifica se o valor retornado é true e armazena a mensagem a ser retonada pro cliente numa String
+						return this.buildResponse("Produto cadastrado com sucesso!"); 
+					} else {
+						return this.buildErrorResponse("Erro ao cadastrar produto!");
+					}
+					
+				}else {
+					conec.fecharConexao();
+					return this.buildErrorResponse("Marca seleciona não existe. Atualize a página do seu navegador e tente novamente. ");
 				}
 				
 			}else {
+				
 				conec.fecharConexao();
-				return this.buildErrorResponse("Marca seleciona não existe. Atualize a página do seu navegador e tente novamente. ");
+				return this.buildErrorResponse("Este produto já está cadastrado em nosso sistema. Atualize a página e tente novamente! ");
+				
 			}
 			
 		}catch(Exception e){

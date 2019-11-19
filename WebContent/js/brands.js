@@ -22,7 +22,7 @@ $(document).ready(function() {
                 },
                 error: function (info) {
                     
-                    COLDIGO.exibirAviso("Erro ao cadastrar marca: "+info.status+" - " + info.statusText)
+                    COLDIGO.exibirAviso("Erro! "+info.responseText)
                 }
             })
 

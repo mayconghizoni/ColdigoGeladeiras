@@ -276,5 +276,32 @@ public class JDBCMarcaDAO implements MarcaDAO{
 		}
 		
 	}
+
+	public boolean verificaMarcaDuplicada(Marca marca) {
+		
+		String comando = "SELECT marcas.nome FROM marcas";
+		PreparedStatement p;
+		
+		try {
+			
+			p = this.conexao.prepareStatement(comando);
+			ResultSet rs = p.executeQuery();
+			
+			while(rs.next()) {
+				
+				if(rs.getString("nome").equals(marca.getNome())) {
+					return false;
+				}
+				
+			}
+			
+			return true;
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+
+	}
 	
 }

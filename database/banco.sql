@@ -22,6 +22,8 @@ CREATE TABLE IF NOT EXISTS produtos (
 
 SELECT * FROM marcas;
 
+SELECT * FROM produtos;
+
 INSERT INTO marcas (nome) VALUES ('Eletrolux');
 INSERT INTO marcas (nome) VALUES ('Brastemp');
 INSERT INTO marcas (nome) VALUES ('Consul');
