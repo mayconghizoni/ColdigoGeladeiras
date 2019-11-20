@@ -51,6 +51,31 @@ public class MarcaRest extends UtilRest{
 		
 	}
 	
+	@GET
+	@Path("/buscarAtivos")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response buscarAtivos(){
+		
+		try {
+			
+			List<Marca> listaMarcas = new ArrayList<Marca>();
+			
+			Conexao conec = new Conexao();//Instancia o objeto conec com os parâmetros da conexão com o bd
+			Connection conexao = conec.abrirConexao();
+			JDBCMarcaDAO jdbcMarca = new JDBCMarcaDAO(conexao);// Instancia objeto jdbcMarca para executar as instruções SQL 
+			listaMarcas = jdbcMarca.buscarAtivos(); // Armazena os dados retirados do método buscar na listaMarcar 
+			
+			conec.fecharConexao();
+			
+			return this.buildResponse(listaMarcas); //Retorna lista de marcas armazenadas em um JSON
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			return this.buildErrorResponse(e.getMessage());
+		}
+		
+	}
+	
 	@POST
 	@Path("/inserir")
 	@Consumes("application/*")
@@ -229,7 +254,7 @@ public class MarcaRest extends UtilRest{
 					conec.fecharConexao();
 					
 					if(retorno){
-						return this.buildResponse("Status alterado com sucesso!");
+						return this.buildResponse("OK!");
 					}else{
 						return this.buildErrorResponse("Erro ao alterar status da marca!");
 					}
@@ -248,11 +273,5 @@ public class MarcaRest extends UtilRest{
 		}
 	
 	}
-	
-	
-	
-	
-	
-	
 
 }

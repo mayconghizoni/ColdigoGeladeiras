@@ -25,10 +25,8 @@ public class JDBCMarcaDAO implements MarcaDAO{
 		//Criação da instrução SQL para busca de todas as marcas
 		String comando = "SELECT * FROM marcas ";
 		
-		if(!param.equals("") && !param.equals("1")) {
+		if(!param.equals("")) {
 			comando += "WHERE nome LIKE '%" + param + "%' ";
-		}else if (param.equals("1")){
-			comando += "WHERE status LIKE '%" + param + "%' ";
 		}
 		
 		comando += "ORDER BY nome ASC";
@@ -74,6 +72,52 @@ public class JDBCMarcaDAO implements MarcaDAO{
 		return listMarcas;
 	}
 
+	@Override
+	public List<Marca> buscarAtivos(){
+		
+		//Criação da instrução SQL para busca de todas as marcas
+		String comando = "SELECT * FROM marcas WHERE status=1 ORDER BY nome ASC";
+		
+		//Criação de uma lista para armazenar cada marca encontrada
+		List<Marca> listMarcas = new ArrayList<Marca>();
+		
+		//Criação do objeto marca com valor null (ou seja, sem instancia-lo)
+		Marca marca = null;
+		
+		try {
+			
+			//Uso da conexao do banco para prepara-lo para uma instrução SQL
+			Statement stmt = conexao.createStatement();
+			
+			//Execução da instrução criada previamente e armazenamento do resultado no objeto rs
+			ResultSet rs = stmt.executeQuery(comando);
+			
+			//Enquanto houver uma próxima linha no resultado
+			while(rs.next()) {
+				
+				//Criação de instancia da classe Marca
+				marca = new Marca();
+				marca.setId(rs.getInt("id"));
+				marca.setNome(rs.getString("nome"));
+				marca.setStatus(rs.getInt("status"));
+				
+				//Adição da instância contida no objeto Marca na lista de marcas
+				listMarcas.add(marca);
+				
+			}
+			
+			
+			//Caso alguma Exception seja gerada no try, recebe-a no objeto "ex"
+		}catch(Exception ex){
+			
+			//Exibe a exceção na consele
+			ex.printStackTrace();
+			
+		}
+		
+		//Retorna para quem chamou o método a lista criada
+		return listMarcas;
+	}
 	
 	public boolean inserir(Marca marca) {
 		

@@ -205,7 +205,7 @@ $(document).ready(function() {
             type: "PUT", //Define metodo de envio
             url: COLDIGO.PATH + "marca/alterarStatus/"+id, //Define url de envio e passa o valor id 
             success: function(msg){
-                COLDIGO.exibirAviso(msg); // Exibe msg retornada do servidor em caso de sucesso
+                // COLDIGO.exibirAviso(msg); // Exibe msg retornada do servidor em caso de sucesso
             },
             error: function(info){
                 COLDIGO.exibirAviso("Erro! "+info.responseText); //Exibe mensagem de erro
