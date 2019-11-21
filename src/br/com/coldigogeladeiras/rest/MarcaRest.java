@@ -234,9 +234,7 @@ public class MarcaRest extends UtilRest{
 		boolean retornoExistencia = jdbcMarca.verificaExistencia(id);
 		
 		if(retornoExistencia) {
-			boolean retornoIntegridade = jdbcMarca.verificaProdutosCadastrados(id);
-			
-			if(retornoIntegridade) {
+
 				try {
 					
 					boolean ativo = jdbcMarca.verificaStatus(id);
@@ -263,10 +261,7 @@ public class MarcaRest extends UtilRest{
 					e.printStackTrace();
 					return this.buildErrorResponse(e.getMessage());
 				}
-			}else {
-				conec.fecharConexao();
-				return this.buildErrorResponse("Existem produtos cadastrados com essa marca. Não será possivel deixá-la inativa!");
-			}
+				
 		}else {
 			conec.fecharConexao();
 			return this.buildErrorResponse("Esta marca não existe. Atualize a página e verifique sua existência!");

@@ -245,7 +245,7 @@ public class JDBCProdutoDAO implements ProdutoDAO{
 
 	public boolean verificaProdutoDuplicado(Produto produto) {
 		
-		String comando = "SELECT produtos.modelo FROM produtos";
+		String comando = "SELECT * FROM produtos";
 		PreparedStatement p;
 		
 		try {
@@ -255,7 +255,7 @@ public class JDBCProdutoDAO implements ProdutoDAO{
 			
 			while(rs.next()) {
 				
-				if(rs.getString("modelo").equals(produto.getModelo())) {
+				if(rs.getString("modelo").equals(produto.getModelo()) && rs.getInt("marcas_id") == produto.getMarcaId()) {
 					return false;
 				}
 				
