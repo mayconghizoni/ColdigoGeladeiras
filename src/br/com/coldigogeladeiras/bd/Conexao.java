@@ -10,7 +10,7 @@ public class Conexao {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");//Seleciona driver JDBC
 			conexao = java.sql.DriverManager.getConnection("jdbc:mysql://localhost/bdcoldigo?" + 
-			"user=root&password=as&useTimezone=true&serverTimezone=UTC"); //Passas os parametros da conexão atual
+			"user=maycon&password=as&useTimezone=true&serverTimezone=UTC"); //Passas os parametros da conexão atual
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
