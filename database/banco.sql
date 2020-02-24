@@ -1,10 +1,12 @@
-CREATE DATABASE IF NOT EXISTS bdcoldigo DEFAULT CHARACTER SET utf-8;
-
 CREATE TABLE IF NOT EXISTS marcas (
 	id INT unsigned NOT NULL AUTO_INCREMENT,
     nome varchar(45) NOT NULL,
     PRIMARY KEY (id)
-)
+);
+
+ALTER TABLE marcas ADD status TINYINT(1) NOT NULL DEFAULT 1;
+
+select * from marcas;
 
 CREATE TABLE IF NOT EXISTS produtos (
 	id INT(5) unsigned zerofill not null auto_increment,
@@ -20,13 +22,8 @@ CREATE TABLE IF NOT EXISTS produtos (
     references marcas(id)
 );
 
-SELECT * FROM marcas;
-
-SELECT * FROM produtos;
-
 INSERT INTO marcas (nome) VALUES ('Eletrolux');
 INSERT INTO marcas (nome) VALUES ('Brastemp');
 INSERT INTO marcas (nome) VALUES ('Consul');
 INSERT INTO marcas (nome) VALUES ('Semp Toshiba');
-INSERT INTO marcas (nome) VALUES ('Acer');
 INSERT INTO marcas (nome) VALUES ('Acer');
